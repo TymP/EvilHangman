@@ -10,14 +10,20 @@ public class UI {
 		alphabet = new StringBuilder();
 	}
 	
-	public int chooseMaxWord(){
+	public int chooseWordLength(){
 		//NEED ERROR HANDLING.
-		System.out.println("Enter maximum word length.");
+		System.out.println("Enter word length.");
 		int max = sc.nextInt();
-		return max; 
-		
+		return max; 		
 	}
 	
+	public boolean quit(){
+		boolean result = false;
+		System.out.println("Quit? (y/n)");
+		if (sc.nextLine().toLowerCase().contains("y"));
+		result =true;
+		return result;
+	}
 	public String getAlphabet(){
 		return alphabet.toString();
 	}

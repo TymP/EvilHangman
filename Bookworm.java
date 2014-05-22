@@ -54,7 +54,7 @@ public class Bookworm {
 		return result;
 	}
 	
-	public int findLetterPositions(String word, char letter){
+	public String findLetterPositions(String word, char letter){
 		StringBuilder sb = new StringBuilder();
 		
 		for(int i =0; i<word.length();i++){
@@ -63,9 +63,9 @@ public class Bookworm {
 			}
 		}
 		if (sb.length() == 0){
-			return -1;
+			return "e";
 		}
-		int result = Integer.parseInt(sb.toString());
+		String result = sb.toString();
 		return result;
 	}
 	
@@ -74,28 +74,28 @@ public class Bookworm {
 	 */
 	public void partition(char letter){
 		//Creat array same length of dictionary, each index holds the species of the String at the same index in the dicitonary.
-		int[] speciesList = new int[dictionary.size()];
+		String[] speciesList = new String[dictionary.size()];
 		ArrayList<String> replacement = new ArrayList<String>();
 		for(int i =0; i<speciesList.length;i++){
 			speciesList[i] = findLetterPositions(dictionary.get(i),letter);
 		}
-		int winner = getMode(speciesList);
+		String winner = getMode(speciesList);
 		for(int i =0; i<speciesList.length;i++){
-			if(speciesList[i] ==winner){
+			if(speciesList[i].equals(winner)){
 				replacement.add(dictionary.get(i));
 			}
 		}
 		this.dictionary=replacement;//Overwrite
 	}
 	
-	public int getMode(int[] list){
+	public String getMode(String[] list){
 		int maxCount =0;
-		int winner = -2;//error
+		String winner = "e";//error
 		for (int i = 0; i<list.length;i++){
 			int count =0;
-			int target = list[i];
+			String target = list[i];
 			for( int j = 0; j<list.length;j++){
-				if (list[j]==target){
+				if (list[j].equals(target)){
 					count ++;
 				}
 			}
@@ -131,7 +131,22 @@ public class Bookworm {
 		return convertToStringArray(dictionary);
 	}
 	
+	public void setWords(String[] palabras){
+		for(String word : palabras){
+			dictionary.add(word);
+		}
+	}
 	
+	public boolean hasLength(int choice){
+		boolean result = false;
+		for(String word : this.dictionary){
+			if(word.length() == choice){
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
 	
 	public String[] convertToStringArray(ArrayList<String> stuff){
 		int howMany = stuff.size();
