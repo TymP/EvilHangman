@@ -1,13 +1,13 @@
-import java.util.Scanner;
-
-
 public class Game {
 
 	public int wordLength; //secret word length
-	public int maxGuesses;//Maximum number of gueses
+	public int maxGuesses;//Maximum number of guesses
 	public boolean runningTotal; //Count running total of guesses?
 	public String current;
 	
+	/*
+	 * Updates the 'current word' to display to the player with the latest guess, if it's correct.
+	 */
 	public void updateCurrent(String example, char guess){
 		StringBuilder replacement = new StringBuilder();
 		for (int i =0; i<current.length();i++){
@@ -25,42 +25,63 @@ public class Game {
 		System.out.println("Welcome to Evil Hangman!"+ "\n");
 		Bookworm bookworm = new Bookworm();
 		boolean quit = false;
-		while(quit == false){//Game loop
+		//GAME LOOP
+		while(quit == false){
 			UI ui = new UI();
 			wordLength = ui.chooseWordLength();
 			maxGuesses = ui.chooseMaxGuesses();
 			runningTotal = ui.chooseRunningTotal();
 			bookworm.read();
+			//Check a word of the desired length exists.
 			while(bookworm.hasLength(wordLength)==false){
 				System.out.println("There are no words of length " + wordLength + " , try again.");
 				wordLength = ui.chooseWordLength();
 			}
+			//Create word made of ?? to display to player.
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0 ; i<wordLength;i++){
 				sb.append("?");
-				
 			}
 			current = sb.toString();
-			System.out.println("Let's get started.");
-			bookworm.purgeForLength(wordLength);
+			//Purge the dictionary, leaving only words of desired length.
+			bookworm.purgeForLength(this.wordLength);
+			
+			//PLAY
+			System.out.println("Let's get started."+"\n");
 			System.out.println("Your word looks like this: "+ this.current + "\n");
 			int tries = 0;
-			while (true) {//Guess loop
-				char guess = ui.getCharGuess();
-				bookworm.partition(guess);
-				if(bookworm.findLetterPositions(bookworm.getWords()[0], guess).equals("e")){
-					System.out.println("Nope, that letter is not in the word.");
-					
-					tries +=1;
-					System.out.println("Your remaining guesses: "+ (this.maxGuesses - tries) + "\n");
+			//GUESS LOOP
+			while (true) {
+				String guess = ui.getGuess(this.wordLength);
+				//WILDGUESS______________________________________________________________________
+				if(guess.length()>1){//User took a wild guess: tried the whole word.
+					if(bookworm.contains(guess)&&bookworm.getWords().length==1){//
+						System.out.println("Correct!, you win.");
+						break;
+					}
+					else{
+						System.out.println("Nope,that word is wrong.");
+						bookworm.removeWord(guess);
+						tries+=1;
+					}
 				}
-				//if the chosen partition does contain the guess. print write
+				//CHARACTER GUESS___________________________________________________________________
 				else{
-					System.out.println("Correct."+ "\n");
-					String sample = bookworm.getWords()[0];
-					updateCurrent(sample,guess);
+					char charGuess = guess.charAt(0);
+					bookworm.partition(charGuess);
+					//If the guess is not in a sample of this partition:
+					if(bookworm.findLetterPositions(bookworm.getWords()[0], charGuess).equals(bookworm.EMPTY_CONDITION)){
+						System.out.println("Nope, that letter is not in the word.");
+						tries +=1;
+						System.out.println("Your remaining guesses: "+ (this.maxGuesses - tries) + "\n");
+					}
+					else{
+						System.out.println("Correct."+ "\n");
+						String sample = bookworm.getWords()[0];
+						updateCurrent(sample,charGuess);
+					}
 				}
-				if(bookworm.findLetterPositions(current, '?').equals("e")){
+				if(bookworm.findLetterPositions(current, '?').equals(bookworm.EMPTY_CONDITION)){//If there are no ?? left.
 					System.out.println("You win!");
 					break;
 				}

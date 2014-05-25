@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Bookworm {
 	
 	public ArrayList<String> dictionary = null;
+	public static final String EMPTY_CONDITION = "e";
 	
 	public Bookworm(){
 		dictionary = new ArrayList<String>();//Initialise the dictionary.
@@ -59,10 +60,32 @@ public class Bookworm {
 			}
 		}
 		if (sb.length() == 0){
-			return "e";
+			return EMPTY_CONDITION;
 		}
 		String result = sb.toString();
 		return result;
+	}
+	
+	public boolean contains(String word){
+		boolean result = false;
+		for(String entry : this.dictionary){
+			if(entry.equals(word)){
+				result = true;
+			}
+		}
+		return result;
+	}
+	
+	public void removeWord(String word){
+		int position =-1;
+		for (int i =0;i<this.dictionary.size();i++){
+			if(word.equals(dictionary.get(i))){
+				position = i;
+			}
+			if(position!=-1){
+				this.dictionary.remove(i);
+			}
+		}
 	}
 	
 	/*

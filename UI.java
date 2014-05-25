@@ -71,7 +71,38 @@ public class UI {
 		return max; 
 	}
 	
-	
+	public String getGuess(int wildLength){
+		String guess= "error";
+		boolean again = true;
+		System.out.println("Guess a character, or try the whole word.");
+		while(again){
+			try{
+				guess = sc.next();
+				again = false;
+				if(guess.length()!=1 &&guess.length()!=wildLength){
+					System.out.println("Invalid guess length. Guess a single character, or the entire word.");
+					again = true;
+				}
+				if(guess.length() ==1){//The guess is a character.
+					char character = guess.charAt((0));
+					if(charUsed(character)){
+						again = true;
+						System.out.println("Character already used, try again.");
+					}
+					else{
+						addCharToAlphabet(character);
+					}
+				}	
+											
+			}
+			catch(Exception InputMismatchException){
+				System.out.println("Invalid input. Guess must be a letter or a word.");
+				sc.next();
+			}
+		}
+				
+		return guess;
+	}
 	public boolean chooseRunningTotal(){
 		System.out.println("Do you want to keep track of a running total?");
 		String response = "error";
@@ -90,7 +121,6 @@ public class UI {
 				sc.next();
 			}
 		}
-		System.out.println(("yes").equals(response));
 		return new String("yes").equals(response);
 	}
 	
