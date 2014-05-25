@@ -7,5 +7,6 @@ public class Tester {
 		Game game = new Game();
 		game.play();
 		
+		
 	}
 }

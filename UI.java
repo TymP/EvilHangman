@@ -1,9 +1,10 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
-
 
 public class UI {
 	private Scanner sc;
 	private StringBuilder alphabet;
+	private static final int DEFAULT_INT = 1;
 	
 	public UI(){
 		sc = new Scanner(System.in);
@@ -11,44 +12,99 @@ public class UI {
 	}
 	
 	public int chooseWordLength(){
-		//NEED ERROR HANDLING.
-		System.out.println("Enter word length.");
-		int max = sc.nextInt();
+		int max=DEFAULT_INT;
+		boolean again = true;
+		System.out.print("Enter word length.");
+		while(again) {
+			try{
+				max = sc.nextInt();
+				again = false;
+			} 
+			catch(InputMismatchException ex){
+				System.out.println("Invalid input, try again.");
+				sc.next();
+			}
+			
+		}
+		
 		return max; 		
 	}
 	
 	public boolean quit(){
-		boolean result = false;
-		System.out.println("Quit? (y/n)");
-		if (sc.nextLine().toLowerCase().contains("y"));
-		result =true;
-		return result;
+		boolean again = true;
+		String in = "error";
+		System.out.println("Quit? (yes or no)");
+		while(again){
+			in = sc.next().toLowerCase();
+			if(in.equals("yes") || in.equals("no")){
+				break;
+			}
+			System.out.println("Invalid input. Type yes or no.");
+			
+		}
+		return in.toLowerCase().equals("yes");
 	}
+	
+	
 	public String getAlphabet(){
 		return alphabet.toString();
 	}
+	
 	public int chooseMaxGuesses(){
-		//NEED ERROR HANDLING.
 		System.out.println("Enter maximum number of guesses");
-		int max = sc.nextInt();
+		int max = DEFAULT_INT;
+		boolean again =true;
+		while(again){
+			try{
+				max = sc.nextInt();
+				again = false;
+				if(max <1 || max >26){
+					again =true;
+					System.out.println("Number out of reasonable range, enter again.");
+				}
+			}
+			catch(Exception InputMismatchException){
+				System.out.println("Invalid input, try again.");
+				sc.next();
+			}
+		}
 		return max; 
 	}
 	
 	
 	public boolean chooseRunningTotal(){
 		System.out.println("Do you want to keep track of a running total?");
-		String response = sc.nextLine().toLowerCase();
+		String response = "error";
+		boolean again = true;
+		while(again){
+			try{
+				response = sc.next().toLowerCase();
+				again = false;
+				if(response.equals("yes")==false && response.equals("no") ==false){
+					again = true;
+					System.out.println("Invalid. Input yes or no.");
+				}
+			}
+			catch(Exception InputMismatchException){
+				System.out.println("Invalid input, try again.");
+				sc.next();
+			}
+		}
+		System.out.println(("yes").equals(response));
 		return new String("yes").equals(response);
 	}
 	
 	public char getCharGuess(){
 		System.out.println("Guess a character.");
+		//Try to get full word input first
 		char input = sc.next().charAt(0);
 		while(charUsed(input)){
 			System.out.println("Already used, guess again.");
 			input = sc.next().charAt(0);
 			
+			
 		}
+		addCharToAlphabet(input);
 		return input;
 		
 	}
@@ -58,8 +114,9 @@ public class UI {
 	
 	public boolean charUsed(char guess){
 		boolean result = false;
+		char tried = Character.toLowerCase(guess);
 		for(int i =0; i<alphabet.length();i++){
-			if(alphabet.charAt(i) == guess){
+			if(alphabet.charAt(i) == tried){
 				result = true;
 			}
 		}

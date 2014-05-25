@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 
 public class Game {
 
@@ -5,15 +7,6 @@ public class Game {
 	public int maxGuesses;//Maximum number of gueses
 	public boolean runningTotal; //Count running total of guesses?
 	public String current;
-	
-	//Initialises instance variables in constructor.
-	
-	public Game(){
-		System.out.println("Welcome to Evil Hangman!"+ "\n");
-		UI ui = new UI();
-		wordLength = ui.chooseWordLength();
-		maxGuesses = ui.chooseMaxGuesses();
-	}
 	
 	public void updateCurrent(String example, char guess){
 		StringBuilder replacement = new StringBuilder();
@@ -29,9 +22,14 @@ public class Game {
 	}
 	
 	public void play(){
-		UI ui = new UI();
+		System.out.println("Welcome to Evil Hangman!"+ "\n");
 		Bookworm bookworm = new Bookworm();
-		while(true){//Game loop
+		boolean quit = false;
+		while(quit == false){//Game loop
+			UI ui = new UI();
+			wordLength = ui.chooseWordLength();
+			maxGuesses = ui.chooseMaxGuesses();
+			runningTotal = ui.chooseRunningTotal();
 			bookworm.read();
 			while(bookworm.hasLength(wordLength)==false){
 				System.out.println("There are no words of length " + wordLength + " , try again.");
@@ -50,7 +48,6 @@ public class Game {
 			while (true) {//Guess loop
 				char guess = ui.getCharGuess();
 				bookworm.partition(guess);
-				//if chosen partition does not contain guess, print wrong. don't update current. print current. tries ++
 				if(bookworm.findLetterPositions(bookworm.getWords()[0], guess).equals("e")){
 					System.out.println("Nope, that letter is not in the word.");
 					
@@ -63,23 +60,28 @@ public class Game {
 					String sample = bookworm.getWords()[0];
 					updateCurrent(sample,guess);
 				}
-				System.out.println("Your progress : " + this.current);
-				
 				if(bookworm.findLetterPositions(current, '?').equals("e")){
 					System.out.println("You win!");
 					break;
 				}
 				
-				if(tries == this.maxGuesses){
-					System.out.println("You lost!");
+				if(tries>= this.maxGuesses){
+					System.out.println("You lost!"+"\n");
+					System.out.println("The word was:" + bookworm.getWords()[0] + "\n");
 					break;
 				}
-			
+				System.out.println("Your progress : " + this.current);
+				
+				if(runningTotal==true){
+					System.out.println("Total possible words remaining: " + bookworm.getWords().length);
+				}
+										
 			}
-			if(ui.quit()){
+			if( ui.quit()){
+				System.out.println("Thanks for playing.");
 				break;
 			}
-
+			
 		}
 	}
 }
