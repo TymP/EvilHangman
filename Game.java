@@ -3,11 +3,12 @@ public class Game {
 	public int wordLength; //secret word length
 	public int maxGuesses;//Maximum number of guesses
 	public boolean runningTotal; //Count running total of guesses?
-	public String current;
+	public String current; //The letters in indexes currently known by the player.
 	
 	/*
 	 * Takes a sample of the words in the dictionary, and the player's character guess. 
-	 * Notes all the positions where the guess appears in the sample, and copies these indexes to the running total,updating it.
+	 * Notes all the positions where the guess appears in the sample
+	 * and copies these indexes to the running total,updating it.
 	 * @param example	A String within the dictionary, within which letter positions will be found.
 	 * @param guess		A single character, its positions within example will be evaluated.
 	 */
@@ -25,7 +26,7 @@ public class Game {
 	}
 	
 	/*
-	 * //Re-assigns instance variable 'current' to a String of ? of the secret word's length. This will be displayed to player.
+	 * Re-assigns instance variable 'current' to a String of ? of the secret word's length. 
 	 */
 	public void createCurrent(){
 		StringBuilder sb = new StringBuilder();
@@ -36,7 +37,8 @@ public class Game {
 	}
 	
 	/*
-	 * Plays Evil Hangman. Calls UI class to take user input for word length, number of guesses, running total display, and character and word guesses.
+	 * Plays Evil Hangman. Calls UI class to take user input for word length, number of guesses, 
+	 * running total display, and character and word guesses.
 	 */
 	public void play(){
 		System.out.println("Welcome to Evil Hangman!"+ "\n");

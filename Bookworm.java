@@ -13,16 +13,17 @@ public class Bookworm {
 	}
 	
 	/*
-	 * Reads the text file 'dictionary.txt'. Adds each term to the instance ArrayList instance variable 'dictionary'.
+	 * Reads the text file 'dictionary.txt'. Adds each term to the  ArrayList instance variable 'dictionary'.
 	 */
 	public void read(){
 		BufferedReader br = null;
 		
-		try { //because we are reading a file.
+		try { 
 			String currentLine; 
 			br = new BufferedReader(new FileReader("C:\\Users\\Tim\\workspace\\EvilHangman\\src\\dictionary.txt"));
 			
-			while((currentLine = br.readLine()) != null){ //define currentLine object in while loop condition. while the current line, which is br.readLine() is something:
+			while((currentLine = br.readLine()) != null){ 
+				//define currentLine object in while loop condition. as long as there is something to read:
 				dictionary.add(currentLine);
 			}
 			
@@ -36,11 +37,15 @@ public class Bookworm {
 			} catch(IOException ex){
 				ex.printStackTrace();
 			}
-			
-		  }
-			
+		}			
 	}
 		
+	/*
+	 * Compares to arrays of integer, decides if they are identical.
+	 * @param a the first int arrray
+	 * @param b the second int array
+	 * @return boolean containing true if they are identical
+	 */
 	public boolean compareIntArrays(int[] a, int[] b){
 		boolean result = true;
 		if(a.length !=b.length){
@@ -54,6 +59,13 @@ public class Bookworm {
 		return result;
 	}
 	
+	/*
+	 * Finds all the positions of a char in a string.
+	 * @param word the string to search for occurences of a character
+	 * @param letter the character to look for within word
+	 * @return a string of int containing the indexes of all occorunces of the letter in word.
+	 * returns EMPTY_CONDITION ("e") if there are no occurences of @param letter in @param word.
+	 */
 	public String findLetterPositions(String word, char letter){
 		StringBuilder sb = new StringBuilder();
 		
@@ -69,6 +81,11 @@ public class Bookworm {
 		return result;
 	}
 	
+	/*
+	 * Checks if the instance variable dictionary contains a string.
+	 * @param word the word to look for.
+	 * @return a boolean containing true if the word was found in dicitonary.
+	 */
 	public boolean contains(String word){
 		boolean result = false;
 		for(String entry : this.dictionary){
@@ -79,6 +96,10 @@ public class Bookworm {
 		return result;
 	}
 	
+	/*
+	 * Removes a word from the instance variable dictionary.
+	 * @param word a String to remove
+	 */
 	public void removeWord(String word){
 		int position =-1;
 		for (int i =0;i<this.dictionary.size();i++){
@@ -92,10 +113,15 @@ public class Bookworm {
 	}
 	
 	/*
-	 * Simplest solution to the partition method.
+	 * Takes a character input and 
+	 * splits the dictionary into partitions containing
+	 * the character at different positions (species)
+	 * overwrites the instance variable dictionary with
+	 * the most common partition.
+	 * @param letter the character to use to partition 
+	 * the instance variable dictionary
 	 */
 	public void partition(char letter){
-		//Creat array same length of dictionary, each index holds the species of the String at the same index in the dicitonary.
 		String[] speciesList = new String[dictionary.size()];
 		ArrayList<String> replacement = new ArrayList<String>();
 		for(int i =0; i<speciesList.length;i++){
@@ -110,6 +136,11 @@ public class Bookworm {
 		this.dictionary=replacement;//Overwrite
 	}
 	
+	/*
+	 * Finds the mode of an array of strings
+	 * @param list an array of strings
+	 * @return the most common string within @param list.
+	 */
 	public String getMode(String[] list){
 		int maxCount =0;
 		String winner = "e";//error
@@ -128,16 +159,12 @@ public class Bookworm {
 		}
 		return winner;
 	}
-	public boolean compareInt(int a, int b){
-		if (a == b){
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
 	
+	/*
+	 * Takes in a desired word length and elimenates all strings of
+	 * a different length from this.dictionary.
+	 * @param length the desired word length
+	 */
 	public void purgeForLength(int length){
 		ArrayList<String> replacement = new ArrayList<String>();
 		for(String word : dictionary){
@@ -148,17 +175,21 @@ public class Bookworm {
 		this.dictionary = replacement;//Overwrite
 	}
 	
-	
+	/*
+	 * Gets this.dictionary as a String array
+	 * @return a string array containing the words in this.dictionary.
+	 */
 	public String[] getWords(){
-		return convertToStringArray(dictionary);
+		String[] result = new String[dictionary.size()];
+		result = dictionary.toArray(result);//passing result as type 
+		return result;		
 	}
 	
-	public void setWords(String[] palabras){
-		for(String word : palabras){
-			dictionary.add(word);
-		}
-	}
-	
+	/*
+	 * Checks if there are any words of a desired length in this.dictionary
+	 * @param choice the desired word length
+	 * @return true if there is a word of desired length in this.dictionary
+	 */
 	public boolean hasLength(int choice){
 		boolean result = false;
 		for(String word : this.dictionary){
@@ -169,13 +200,4 @@ public class Bookworm {
 		}
 		return result;
 	}
-	
-	public String[] convertToStringArray(ArrayList<String> stuff){
-		int howMany = stuff.size();
-		String[] result = new String[howMany];
-		result = stuff.toArray(result);//passing result as type 
-		return result;
-		}
-		
-
 }
