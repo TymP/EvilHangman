@@ -12,6 +12,9 @@ public class Bookworm {
 		dictionary = new ArrayList<String>();//Initialise the dictionary.
 	}
 	
+	/*
+	 * Reads the text file 'dictionary.txt'. Adds each term to the instance ArrayList instance variable 'dictionary'.
+	 */
 	public void read(){
 		BufferedReader br = null;
 		
