@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Bookworm {
 	
 	public ArrayList<String> dictionary = null;
-	public static final String EMPTY_CONDITION = "e";
+	public static final int[] EMPTY_CONDITION = {-1};
 	
 	public Bookworm(){
 		dictionary = new ArrayList<String>();//Initialise the dictionary.
@@ -41,7 +41,7 @@ public class Bookworm {
 	}
 		
 	/*
-	 * Compares to arrays of integer, decides if they are identical.
+	 * Compares two int arrays, decides if they are identical.
 	 * @param a the first int arrray
 	 * @param b the second int array
 	 * @return boolean containing true if they are identical
@@ -66,18 +66,35 @@ public class Bookworm {
 	 * @return a string of int containing the indexes of all occorunces of the letter in word.
 	 * returns EMPTY_CONDITION ("e") if there are no occurences of @param letter in @param word.
 	 */
-	public String findLetterPositions(String word, char letter){
-		StringBuilder sb = new StringBuilder();
-		
-		for(int i =0; i<word.length();i++){
+//	public String findLetterPositions(String word, char letter){
+//		StringBuilder sb = new StringBuilder();
+//		
+//		for(int i =0; i<word.length();i++){
+//			if (word.charAt(i)==letter){
+//				sb.append(i);
+//			}
+//		}
+//		if (sb.length() == 0){
+//			return EMPTY_CONDITION;
+//		}
+//		String result = sb.toString();
+//		return result;
+//	}
+	
+	public int[] findLetterPositions(String word, char letter){
+		ArrayList<Integer> positions = new ArrayList<Integer>();
+		for(int i = 0; i<word.length(); i++){
 			if (word.charAt(i)==letter){
-				sb.append(i);
+				positions.add(i);
 			}
 		}
-		if (sb.length() == 0){
+		if(positions.size() ==0){
 			return EMPTY_CONDITION;
 		}
-		String result = sb.toString();
+		int[] result = new int[positions.size()];
+		for(int i = 0; i<positions.size();i++){
+			result[i] = positions.get(i).intValue();
+		}
 		return result;
 	}
 	
@@ -122,14 +139,18 @@ public class Bookworm {
 	 * the instance variable dictionary
 	 */
 	public void partition(char letter){
-		String[] speciesList = new String[dictionary.size()];
+		int[][] speciesList = new int[dictionary.size()][];
+		for(int i = 0; i<dictionary.size(); i++){
+			speciesList[i] = findLetterPositions(dictionary.get(i),letter);
+		}
+		//String[] speciesList = new String[dictionary.size()];
 		ArrayList<String> replacement = new ArrayList<String>();
 		for(int i =0; i<speciesList.length;i++){
 			speciesList[i] = findLetterPositions(dictionary.get(i),letter);
 		}
-		String winner = getMode(speciesList);
+		int[] winner = getMode(speciesList);//fix this
 		for(int i =0; i<speciesList.length;i++){
-			if(speciesList[i].equals(winner)){
+			if(compareIntArrays(speciesList[i],winner)){
 				replacement.add(dictionary.get(i));
 			}
 		}
@@ -137,9 +158,9 @@ public class Bookworm {
 	}
 	
 	/*
-	 * Finds the mode of an array of strings
-	 * @param list an array of strings
-	 * @return the most common string within @param list.
+	 * Finds the mode of an array int arrays
+	 * @param list an array int arrays
+	 * @return the most common int array within @param list.
 	 */
 	public String getMode(String[] list){
 		int maxCount =0;
@@ -151,6 +172,25 @@ public class Bookworm {
 				if (list[j].equals(target)){
 					count ++;
 				}
+			}
+			if(count>maxCount){
+				winner = target;
+				maxCount = count;
+			}
+		}
+		return winner;
+	}
+	public int[] getMode(int[][] list){
+		int maxCount = 0;
+		int[] winner = EMPTY_CONDITION; //error
+		for(int i = 0; i<list.length; i++){
+			int count = 0;
+			int[] target = list[i];
+			for(int j =0; j<list.length;j++){
+				if(compareIntArrays(list[j],target)){
+					count++;
+				}
+				
 			}
 			if(count>maxCount){
 				winner = target;
